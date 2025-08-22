@@ -38,6 +38,7 @@ namespace BookPublishing
             CheckCopyNumber();
             CheckCountry();
             StatsTable();
+            MoreEdition();
             Console.ReadKey();
         }
         static void ReadFile()
@@ -141,6 +142,29 @@ namespace BookPublishing
             }
             strings[strings.Length - 1] = "</table>";
             File.WriteAllLines("tabla.html", strings, Encoding.UTF8);
+        }
+        static void MoreEdition()
+        {
+            Console.WriteLine("6. feladat:");
+            //Key: Book name || Value: Book copyNumber
+            Dictionary<string, int> doubleBook = new Dictionary<string, int>();
+            List<string> repeatingNames = new List<string>();
+            for (int i = 0; i < bookList.Count; i++)
+            {
+                Book book = bookList[i];
+
+                if (!doubleBook.ContainsKey(book.name))
+                {
+                    doubleBook.Add(book.name, book.copyNumber);
+                } else if (!repeatingNames.Contains(book.name) && book.copyNumber > doubleBook[book.name])
+                {
+                    repeatingNames.Add(book.name);
+                } else if (repeatingNames.Contains(book.name) && book.copyNumber > doubleBook[book.name])
+                {
+                    Console.WriteLine(book.name);
+                    doubleBook[book.name] = int.MaxValue;
+                }
+            }
         }
     }
 }
